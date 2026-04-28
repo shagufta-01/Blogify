@@ -6,21 +6,25 @@ import { v2 as cloudinary } from "cloudinary";
 import fileUpload from "express-fileupload";
 import blogRoute from "./routes/blog.routes.js";
 import cookieParser from "cookie-parser";
-
-
-dotenv.config();
+import cors from "cors"
 
 const app = express();
+dotenv.config();
 
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+  origin: process.env.Frontend_Url,
+  credentials:true,
+  methods:["GET","POST","PUT","DELETE"]
+}))
 app.use(
   fileUpload({
     useTempFiles: true,
     tempFileDir: "./tmp/",
   }),
 );
-app.use(cookieParser());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/user", userRoute);
 app.use("/api/blog", blogRoute);
@@ -52,3 +56,4 @@ const startServer = async () => {
 };
 
 startServer();
+
