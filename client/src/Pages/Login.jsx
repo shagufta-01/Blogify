@@ -1,89 +1,89 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-
+import toast from "react-hot-toast";
 function Login() {
-  const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user");
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+const handleLogin = async (e) => {
+  e.preventDefault();
 
-    try {
-      const { data } = await axios.post("http://localhost:5000/api/user/login", {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:5000/api/user/login",
+      {
         email,
         password,
         role,
-      });
-
-      console.log("LOGIN RESPONSE:", data);
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.user?.role || role);
-
-      alert("Login successful ✅");
-
-      if ((data.user?.role || role) === "admin") {
-        navigate("/dashboard");
-      } else {
-        navigate("/");
-
-        
       }
+    );
 
-      localStorage.setItem("token", data.token);
+    console.log(data);
+    toast.success("Login successful");
 
-// ❌ navigate hata do
-// navigate("/");
+    localStorage.setItem("token", data.token);
 
-// ✅ ye use karo
-window.location.href = "/";
-    } catch (error) {
-      console.log("Login error:", error.response?.data || error.message);
-      alert(error.response?.data?.message || "Login failed ❌");
-    }
-  };
+    setEmail("");
+    setPassword("");
+    setRole("user");
+  } catch (error) {
+    console.log(error.response?.data || error.message);
+    toast.error(error.response?.data?.message || "Login failed");
+  }
+};
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h2>Login</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8">
+        <form onSubmit={handleLogin}>
+          <div className="font-semibold text-xl text-center">
+            Blog<span className="text-blue-500">ify</span>
+          </div>
 
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Enter Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+          <h1 className="text-xl font-semibold mb-6">Login</h1>
 
-        <br />
-        <br />
+          <select
+            className="w-full p-2 mb-4 border rounded-md"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+          >
+            <option value="">Select a role</option>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
 
-        <input
-          type="password"
-          placeholder="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <input
+            type="email"
+            placeholder="Enter Email"
+            className="w-full p-2 mb-4 border rounded-md"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <br />
-        <br />
+          <input
+            type="password"
+            placeholder="Enter Password"
+            className="w-full p-2 mb-4 border rounded-md"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <select value={role} onChange={(e) => setRole(e.target.value)} required>
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white font-semibold hover:bg-blue-800 duration-300 px-4 py-2 rounded"
+          >
+            Login
+          </button>
 
-        <br />
-        <br />
-
-        <button type="submit">Login</button>
-      </form>
+          <div className="text-sm mt-4">
+            Don't have an account?{" "}
+            <a href="/register" className="text-blue-500 hover:underline">
+              Register here
+            </a>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

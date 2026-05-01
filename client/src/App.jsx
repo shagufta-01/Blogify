@@ -4,6 +4,7 @@ import { useAuth } from './Context/AuthProvider';
 import Footer from './Components/Footer'
 import Home from  './Components/Home'
 import Blogs from './Pages/Blogs'
+import  { Toaster } from 'react-hot-toast';
 import About from './Pages/About'
 import Login from './Pages/Login'
 import Register from './Pages/Register'
@@ -20,7 +21,7 @@ function App() {
    {!hideNavbarFooter && <Navbar />}
    
    <Routes>
-    {/* <Route exact path="/" element={<Home />} /> */}
+    <Route exact path="/" element={<Home />} />
     <Route exact path="/blogs"  element={<Blogs />} />
     <Route exact path = "/about" element={<About />} />
     <Route exact path="/contact"  element={<Contact />} />  
@@ -28,6 +29,7 @@ function App() {
     <Route exact path="/register"  element={<Register />} />
     <Route exact path = "/dashboard" element={<Dashboard />} />
    </Routes>
+    <Toaster position="top-center" reverseOrder={false} />
   
     {/* {!hideNavbarFooter && <Footer />} */}
     
