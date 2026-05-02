@@ -26,10 +26,8 @@ export const createBlog = async (req, res) => {
         message: "Please fill all the fields",
       });
     }
-    const adminName = req.user.name || "Admin";
-    const adminPhoto =
-      req?.user?.photo?.url ||
-      "https://res.cloudinary.com/dzcmadjl1/image/upload/v1700000000/default-avatar.png";
+    const adminName = req?.user?.name;
+    const adminPhoto =req?.user?.photo?.url
     const createdBy = req?.user?._id;
 
     const cloudinaryResponse = await cloudinary.uploader.upload(

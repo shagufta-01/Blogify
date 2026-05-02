@@ -31,7 +31,7 @@ function App() {
    </Routes>
     <Toaster position="top-center" reverseOrder={false} />
   
-    {/* {!hideNavbarFooter && <Footer />} */}
+    {!hideNavbarFooter && <Footer />}
     
     </>
   )

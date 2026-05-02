@@ -1,33 +1,18 @@
-import React from 'react'
-import { useAuth } from '../Context/AuthProvider'
-import {Link} from 'react-router-dom'
+import React from "react";
+import Hero from "../Home/Hero";
+import Trending from "../Home/Trending";
+import Devotional from "../Home/Devotional";
+import Creater from "../Home/Creater";
+
 function Home() {
-  const {blogs} =  useAuth()
   return (
     <div>
-     {blogs && blogs.length > 0 ? (
-  blogs.slice(0, 3).map((element) => {
-    return (
-      <Link to="/" key={element._id}>
-        <div>
-          <img src={element.blogImage.url} alt={element.title} />
-          <h1>{element.title}</h1>
-        </div>
-
-        <div>
-          <img src={element.adminPhoto} alt={element.adminName} />
-          <div>
-            <p>{element.adminName}</p>
-            <p>New</p>
-          </div>
-        </div>
-      </Link>
-    );
-  })
-) : (
-  <p>No blogs found</p>
-)}
+      <Hero />
+      <Trending />
+      <Devotional />
+      <Creater />
     </div>
-  )
+  );
 }
-export default Home
+
+export default Home;
