@@ -1,10 +1,8 @@
 import React from "react";
-import { useAuth } from "../Context/AuthProvider";
+import { useAuth } from "../context/AuthProvider";
 import { Link } from "react-router-dom";
-import CarouselModule from "react-multi-carousel";
+import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-
-const Carousel = CarouselModule.default
 function Trending() {
   const { blogs } = useAuth();
 

@@ -1,48 +1,35 @@
-import User from "../modals/user.modal.js";
+import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
-
-// Authentication middleware to protect routes and ensure only authenticated users can access certain endpoints
+//Authentication
 export const isAuthenticated = async (req, res, next) => {
   try {
-  const token =
-  req.cookies?.jwt ||
-  (req.headers.authorization?.startsWith("Bearer ")
-    ? req.headers.authorization.split(" ")[1]
-    : null);
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.userId);
-
-    if (!user) {
-      return res.status(401).json({
-        message: "Unauthorized: User not found",
-      });
+    const token = req.cookies.jwt;
+    console.log("Middleware : ", token);
+    if (!token) {
+      return res.status(401).json({ error: "User not authenticated" });
     }
-
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
     req.user = user;
     next();
   } catch (error) {
-    console.log("Auth middleware error:", error.message);
-    return res.status(401).json({
-      message: "Unauthorized: Invalid token",
-    });
+    console.log("Error occuring in Authentication: " + error);
+    return res.status(401).json({ error: "User not authenticated" });
   }
 };
 
-
-// Authorization middleware to restrict access to certain routes based on user roles (e.g., admin-only routes)
-export const authorizeRoles = (...roles) => {
+//Authorization
+export const isAdmin = (...roles) => {
   return (req, res, next) => {
-    console.log("User role:", req.user.role);
-    console.log("Allowed roles:", roles);
-
     if (!roles.includes(req.user.role)) {
-      return res.status(403).json({
-        message: "Access denied",
-      });
+      return res
+        .status(403)
+        .json({ error: `User with given role ${req.user.role} not allowed` });
     }
-
     next();
   };
 };

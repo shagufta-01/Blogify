@@ -1,14 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-function Creator() {
+function Creators() {
   const [creators, setCreators] = useState([]);
   console.log(creators);
   useEffect(() => {
     const fetchCreators = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:5000/api/user/admin",
+          "http://localhost:4001/api/users/admins",
           {
             withCredentials: true,
           }
@@ -56,4 +56,4 @@ function Creator() {
   );
 }
 
-export default Creator;
+export default Creators;

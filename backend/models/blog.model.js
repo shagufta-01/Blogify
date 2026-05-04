@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import validator from "validator";
 const blogSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
   },
+
   blogImage: {
     public_id: {
       type: String,
@@ -22,20 +22,17 @@ const blogSchema = new mongoose.Schema({
   about: {
     type: String,
     required: true,
-    minlength: [200, " Blog about must be at least 200 characters long"],
+    minlength: [200, "Should caontain atleast 200 characters!"],
   },
   adminName: {
     type: String,
-    required: true,
   },
   adminPhoto: {
     type: String,
-    required: true,
   },
   createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.ObjectId,
     ref: "User",
-    
   },
 });
-export default mongoose.model("Blog", blogSchema);
+export const Blog = mongoose.model("Blog", blogSchema);

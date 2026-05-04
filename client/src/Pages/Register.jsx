@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../Context/AuthProvider";
+import { useAuth } from "../context/AuthProvider";
 
 function Register() {
   const { isAuthenticated, setIsAuthenticated, setProfile } = useAuth();
@@ -41,7 +41,7 @@ function Register() {
     formData.append("photo", photo);
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/user/register",
+        "http://localhost:4001/api/users/register",
         formData,
         {
           withCredentials: true,
@@ -67,7 +67,7 @@ function Register() {
     } catch (error) {
       console.log(error);
       toast.error(
-        error.response.data.message
+        error.response.data.message || "Please fill the required fields"
       );
     }
   };

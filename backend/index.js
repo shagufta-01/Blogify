@@ -1,59 +1,55 @@
 import express from "express";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
-import userRoute from "./routes/user.route.js";
-import { v2 as cloudinary } from "cloudinary";
+import mongoose from "mongoose";
 import fileUpload from "express-fileupload";
-import blogRoute from "./routes/blog.routes.js";
+import { v2 as cloudinary } from "cloudinary";
 import cookieParser from "cookie-parser";
-import cors from "cors"
+import userRoute from "./routes/user.route.js";
+import blogRoute from "./routes/blog.route.js";
 
+import cors from "cors";
 const app = express();
 dotenv.config();
 
-app.use(cookieParser());
+const port = process.env.PORT;
+const MONOGO_URL = process.env.MONOG_URI;
+
+//middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  origin: process.env.Frontend_Url,
-  credentials:true,
-  methods:["GET","POST","PUT","DELETE"]
-}))
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
+
 app.use(
   fileUpload({
     useTempFiles: true,
-    tempFileDir: "./tmp/",
-  }),
+    tempFileDir: "/tmp/",
+  })
 );
 
-app.use("/api/user", userRoute);
-app.use("/api/blog", blogRoute);
-// app.use("/api/user", userRoute);
+// DB Code
+try {
+  mongoose.connect(MONOGO_URL);
+  console.log("Conntected to MonogDB");
+} catch (error) {
+  console.log(error);
+}
+
+// defining routes
+app.use("/api/users", userRoute);
+app.use("/api/blogs", blogRoute);
+// Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET,
+  api_secret: process.env.CLOUD_SECRET_KEY,
 });
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
-
-const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI;
-
-const startServer = async () => {
-  try {
-    await mongoose.connect(MONGODB_URI);
-    console.log("Connected to MongoDB");
-
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  } catch (err) {
-    console.log("MongoDB connection error:", err.message);
-  }
-};
-
-startServer();
-

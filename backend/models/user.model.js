@@ -35,18 +35,18 @@ const userSchema = new mongoose.Schema({
     required: true,
     enum: ["user", "admin"],
   },
-  token:{
-    type:String,
-  },
   password: {
     type: String,
     required: true,
-    minlength: 8,
     select: false,
+    minlength: 8,
+  },
+  token: {
+    type: String,
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
-export default mongoose.model("User", userSchema);
+export const User = mongoose.model("User", userSchema);
