@@ -1,46 +1,87 @@
 import React from "react";
 import { useAuth } from "../context/AuthProvider";
 import { Link } from "react-router-dom";
+import CarouselLib from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+
+const Carousel = CarouselLib.default; // 🔥 FIX
 
 function Devotional() {
   const { blogs } = useAuth();
-  const devotionalBlogs = blogs?.filter((blog) => blog.category === "Devotion");
-  console.log(devotionalBlogs);
+
+  const responsive = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 3000 },
+      items: 5,
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 5,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+    },
+  };
+
+  // 🔥 DEBUG (optional — remove later)
+  console.log("Blogs:", blogs);
+console.log("Carousel:", Carousel);
   return (
-    <div>
-      <div className="container mx-auto my-12 p-4">
-        <h1 className="text-2xl font-bold mb-6">Devotional</h1>
-        <p className="text-center mb-8">
-          The concept of gods varies widely across different cultures,
-          religions, and belief systems
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-          {devotionalBlogs && devotionalBlogs.length > 0 ? (
-            devotionalBlogs.map((blog, index) => (
-              <Link
-                to={`/blog/${blog._id}`}
-                key={index}
-                className="relative rounded-lg overflow-hidden shadow-md transform hover:scale-105 transition-transform duration-300"
-              >
-                <img
-                  src={blog?.blogImage?.url}
-                  alt={blog?.title}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute inset-0 bg-black opacity-30"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h2 className="text-lg font-semibold">{blog?.title}</h2>
-                  <p className="text-sm">{blog?.category}</p>
+    <div className="container mx-auto">
+      <h1 className="text-2xl font-semibold mt-5">Devotional</h1>
+
+      {Array.isArray(blogs) && blogs.length > 0 ? (
+        <Carousel responsive={responsive}>
+          {blogs.slice(0, 6).map((element) => (
+            <div
+              key={element._id}
+              className="p-4 bg-white border border-gray-400 rounded-lg shadow-md mx-2"
+            >
+              <Link to={`/blog/${element._id}`}>
+                <div className="relative">
+                  <img
+                    src={element.blogImage?.url || "/default.jpg"} // ✅ safe
+                    alt="blog"
+                    className="w-full h-56 object-cover rounded-t-lg"
+                  />
+                  <div className="absolute top-4 left-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm">
+                    {element.category}
+                  </div>
+                </div>
+
+                <div className="p-4 bg-gray-50 rounded-b-lg h-36 flex flex-col justify-between">
+                  <h1
+                    className="text-lg font-bold mb-2 overflow-hidden text-ellipsis"
+                    style={{ whiteSpace: "nowrap" }}
+                  >
+                    {element.title}
+                  </h1>
+
+                  <div className="flex items-center">
+                    <img
+                      src={element.adminPhoto || "/default.png"} // ✅ safe
+                      alt="author"
+                      className="w-10 h-10 rounded-full"
+                    />
+                    <p className="ml-3 text-gray-400 text-sm">
+                      {element.adminName}
+                    </p>
+                  </div>
                 </div>
               </Link>
-            ))
-          ) : (
-            <div className=" flex h-screen items-center justify-center">
-              Loading....
             </div>
-          )}
+          ))}
+        </Carousel>
+      ) : (
+        <div className="flex h-40 items-center justify-center">
+          Loading...
         </div>
-      </div>
+      )}
     </div>
   );
 }

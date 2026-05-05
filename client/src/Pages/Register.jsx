@@ -29,48 +29,45 @@ function Register() {
     };
   };
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("phone", phone);
-    formData.append("password", password);
-    formData.append("role", role);
-    formData.append("education", education);
-    formData.append("photo", photo);
-    try {
-      const { data } = await axios.post(
-        "http://localhost:4001/api/users/register",
-        formData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log(data);
-      localStorage.setItem("jwt", data.token); // storing token in localStorage so that if user refreshed the page it will not redirect again in login
-      toast.success(data.message || "User registered successfully");
-      setProfile(data);
-      setIsAuthenticated(true);
-      setName("");
-      setEmail("");
-      setPhone("");
-      setPassword("");
-      setRole("");
-      setEducation("");
-      setPhoto("");
-      setPhotoPreview("");
-      navigateTo("/");
-    } catch (error) {
-      console.log(error);
-      toast.error(
-        error.response.data.message || "Please fill the required fields"
-      );
-    }
-  };
+ const handleRegister = async (e) => {
+  e.preventDefault();
+
+  if (!photo) {
+    return toast.error("Photo is required");
+  }
+
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("email", email);
+  formData.append("phone", phone);
+  formData.append("password", password);
+  formData.append("role", role);
+  formData.append("education", education);
+  formData.append("photo", photo);
+
+  try {
+    const { data } = await axios.post(
+      "http://localhost:4001/api/users/register",
+      formData
+      // ❌ no headers
+      // ❌ no withCredentials
+    );
+
+    localStorage.setItem("jwt", data.token);
+
+    toast.success(data.message || "Registered successfully");
+
+    setProfile(data.user);
+    setIsAuthenticated(true);
+
+    navigateTo("/");
+  } catch (error) {
+    console.log(error);
+    toast.error(
+      error.response?.data?.message || error.message || "Error"
+    );
+  }
+};
 
   return (
     <div>
