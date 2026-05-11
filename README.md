@@ -173,6 +173,7 @@ npm run dev
 ## 👨‍💻 Author
 
 **Shagufta Fatima**
+full stack blogify app
 
 ---
 
