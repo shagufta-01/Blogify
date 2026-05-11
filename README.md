@@ -29,7 +29,9 @@ In today’s digital space, most blogging platforms are either:
 
 👉 In short:
 **“Blogify makes discovering and reading blogs simple, organized, and user-friendly.”**
+
 ---
+
 ## 📌 Features
 
 * 🔐 User Authentication (Register / Login / Logout)
