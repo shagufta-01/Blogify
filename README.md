@@ -1,19 +1,3 @@
-# 🚀 Blogify - Full Stack Blog Application
-
-**Blogify** is a modern full-stack blogging platform that allows users to explore, read, and interact with blogs across different categories in a clean and user-friendly interface.
-
----
-
-## ❗ Problem It Solves
-
-In today’s digital space, most blogging platforms are either:
-
-* ❌ Too complex for beginners
-* ❌ Not well organized by categories
-* ❌ Lack proper authentication & personalization
-* ❌ Poor user experience on smaller devices
-
-👉 Users struggle to **find relevant content easily** and **manage their profiles smoothly**.
 
 ---
 
